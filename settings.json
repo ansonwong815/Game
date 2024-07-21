@@ -1,0 +1,407 @@
+{
+  "easy": {
+    "player": {
+      "maxHealth" : 500,
+      "health": 500,
+      "coins": 50
+    },
+    "caves": {
+      "min": 8,
+      "WUMPUS": 1,
+      "BAT": 1,
+      "SHOP": 2,
+      "HOLE": 0,
+      "ORC": 2
+    },
+    "caves setup": {
+      "Orc": {
+        "Reward": 30,
+        "Orc Leader": [0,0],
+        "Orc Soldier": [0,0],
+        "Orc Mage": [0,1],
+        "Orc Villager": [0,2],
+        "Orc Grunt": [1,2]
+      },
+      "Wumpas": {
+        "Reward": 50,
+        "Orc Leader": [0,1],
+        "Orc Soldier": [1,2],
+        "Orc Mage": [0,1],
+        "Orc Grunt": [0,2],
+        "Orc Villager": [0,0]
+      }
+    },
+    "enemies": {
+      "Orc Villager": {
+        "name": "Orc Villager",
+        "health": "30",
+        "maxHealth": "30",
+        "damage": "10",
+        "crit_rate": "0.2",
+        "crit_damage": "1.2",
+        "DOTTurns": "0",
+        "DOTDam": "0",
+        "heal_amount": "0",
+        "coins":"10",
+        "chances": {
+          "sword": 0,
+          "bow":0.5,
+          "wand":0,
+          "heal":0,
+          "buff":0.5
+        },
+        "SpriteSheet": "Characters/Orc-Peon-Cyan.png"
+      },
+      "Orc Grunt": {
+        "name": "Orc Grunt",
+        "health": "40",
+        "maxHealth": "40",
+        "damage": "12",
+        "crit_rate": "0.2",
+        "crit_damage": "1.3",
+        "DOTTurns": "0",
+        "DOTDam": "0",
+        "heal_amount": "0",
+        "coins":"15",
+        "chances": {
+          "sword": 0.8,
+          "bow":0,
+          "wand":0,
+          "heal":0,
+          "buff":0.2
+        },
+        "SpriteSheet": "Characters/Orc-Grunt.png"
+      },
+      "Orc Mage": {
+        "name": "Orc Mage",
+        "health": "30",
+        "maxHealth": "30",
+        "damage": "20",
+        "crit_rate": "0.2",
+        "crit_damage": "1.3",
+        "DOTTurns": "2",
+        "DOTDam": "0.2",
+        "heal_amount": "15",
+        "coins":"20",
+        "chances": {
+          "sword": 0,
+          "bow":0,
+          "wand":0.7,
+          "heal":0.3,
+          "buff":0
+        },
+        "SpriteSheet": "Characters/Orc-Peon-Red.png"
+      },
+      "Orc Soldier": {
+        "name": "Orc Soldier",
+        "health": "60",
+        "maxHealth": "60",
+        "damage": "20",
+        "crit_rate": "0.2",
+        "crit_damage": "1.3",
+        "DOTTurns": "0",
+        "DOTDam": "0",
+        "heal_amount": "0",
+        "coins":"25",
+        "chances": {
+          "sword": 0.7,
+          "bow":0,
+          "wand":0,
+          "heal":0.2,
+          "buff":0.1
+        },
+        "SpriteSheet": "Characters/Orc-Soldier-Cyan.png"
+      },
+      "Orc Leader": {
+        "name": "Orc Leader",
+        "health": "100",
+        "maxHealth": "100",
+        "damage": "25",
+        "crit_rate": "0.2",
+        "crit_damage": "1.5",
+        "DOTTurns": "0",
+        "DOTDam": "0",
+        "heal_amount": "25",
+        "coins":"30",
+        "chances": {
+          "sword": 0.7,
+          "bow":0,
+          "wand":0,
+          "heal":0.1,
+          "buff":0.2
+        },
+        "SpriteSheet": "Characters/Orc-Soldier-Red.png"
+      }
+    }
+  },
+  "normal": {
+    "player": {
+      "maxHealth" : 400,
+      "health": 400,
+      "coins": 40
+    },
+    "caves": {
+      "min": 12,
+      "WUMPUS": 1,
+      "BAT": 2,
+      "SHOP": 2,
+      "HOLE": 0,
+      "ORC": 4
+    },
+    "caves setup": {
+      "Orc": {
+        "Reward": 25,
+        "Orc Leader": [0,0],
+        "Orc Soldier": [0,0],
+        "Orc Mage": [0,1],
+        "Orc Grunt": [1,2],
+        "Orc Villager": [0,2]
+      },
+      "Wumpas": {
+        "Reward": 50,
+        "Orc Leader": [1,1],
+        "Orc Soldier": [1,2],
+        "Orc Mage": [1,2],
+        "Orc Grunt": [1,2],
+        "Orc Villager": [0,0]
+      }
+    },
+    "enemies": {
+      "Orc Villager": {
+        "name": "Orc Villager",
+        "health": "30",
+        "maxHealth": "30",
+        "damage": "10",
+        "crit_rate": "0.2",
+        "crit_damage": "1.2",
+        "DOTTurns": "0",
+        "DOTDam": "0",
+        "heal_amount": "0",
+        "coins": "7",
+        "chances": {
+          "sword": 0,
+          "bow": 0.5,
+          "wand": 0,
+          "heal": 0,
+          "buff": 0.5
+        },
+        "SpriteSheet": "Characters/Orc-Peon-Cyan.png"
+      },
+      "Orc Grunt": {
+        "name": "Orc Grunt",
+        "health": "40",
+        "maxHealth": "40",
+        "damage": "12",
+        "crit_rate": "0.2",
+        "crit_damage": "1.3",
+        "DOTTurns": "0",
+        "DOTDam": "0",
+        "heal_amount": "0",
+        "coins": "13",
+        "chances": {
+          "sword": 0.8,
+          "bow": 0,
+          "wand": 0,
+          "heal": 0,
+          "buff": 0.2
+        },
+        "SpriteSheet": "Characters/Orc-Grunt.png"
+      },
+      "Orc Mage": {
+        "name": "Orc Mage",
+        "health": "30",
+        "maxHealth": "30",
+        "damage": "20",
+        "crit_rate": "0.2",
+        "crit_damage": "1.3",
+        "DOTTurns": "4",
+        "DOTDam": "0.2",
+        "heal_amount": "20",
+        "coins": "20",
+        "chances": {
+          "sword": 0,
+          "bow": 0,
+          "wand": 0.5,
+          "heal": 0.3,
+          "buff": 0.2
+        },
+        "SpriteSheet": "Characters/Orc-Peon-Red.png"
+      },
+      "Orc Soldier": {
+        "name": "Orc Soldier",
+        "health": "80",
+        "maxHealth": "80",
+        "damage": "20",
+        "crit_rate": "0.2",
+        "crit_damage": "1.5",
+        "DOTTurns": "0",
+        "DOTDam": "0",
+        "heal_amount": "0",
+        "coins": "25",
+        "chances": {
+          "sword": 0.7,
+          "bow": 0,
+          "wand": 0,
+          "heal": 0.2,
+          "buff": 0.1
+        },
+        "SpriteSheet": "Characters/Orc-Soldier-Cyan.png"
+      },
+      "Orc Leader": {
+        "name": "Orc Leader",
+        "health": "120",
+        "maxHealth": "120",
+        "damage": "25",
+        "crit_rate": "0.2",
+        "crit_damage": "2",
+        "DOTTurns": "0",
+        "DOTDam": "0",
+        "heal_amount": "25",
+        "coins": "35",
+        "chances": {
+          "sword": 0.7,
+          "bow": 0,
+          "wand": 0,
+          "heal": 0.1,
+          "buff": 0.2
+        },
+        "SpriteSheet": "Characters/Orc-Soldier-Red.png"
+      }
+    }
+  },
+  "hard": {
+    "player": {
+      "maxHealth" : 300,
+      "health": 300,
+      "coins": 30
+    },
+    "caves": {
+      "min": 15,
+      "WUMPUS": 1,
+      "BAT": 3,
+      "SHOP": 2,
+      "HOLE": 0.5,
+      "ORC": 4
+    },
+    "caves setup": {
+      "Orc": {
+        "Reward": 20,
+        "Orc Leader": [0,0],
+        "Orc Soldier": [0,1],
+        "Orc Mage": [0,2],
+        "Orc Grunt": [1,2],
+        "Orc Villager": [0,2]
+      },
+      "Wumpas": {
+        "Reward": 50,
+        "Orc Leader": [1,1],
+        "Orc Soldier": [2,2],
+        "Orc Mage": [2,2],
+        "Orc Grunt": [2,2],
+        "Orc Villager": [0,0]
+      }
+    },
+    "enemies": {
+      "Orc Villager": {
+        "name": "Orc Villager",
+        "health": "30",
+        "maxHealth": "30",
+        "damage": "15",
+        "crit_rate": "0.2",
+        "crit_damage": "1.5",
+        "DOTTurns": "0",
+        "DOTDam": "0",
+        "heal_amount": "0",
+        "coins":"5",
+        "chances": {
+          "sword": 0,
+          "bow":0.5,
+          "wand":0,
+          "heal":0,
+          "buff":0.5
+        },
+        "SpriteSheet": "Characters/Orc-Peon-Cyan.png"
+      },
+      "Orc Grunt": {
+        "name": "Orc Grunt",
+        "health": "50",
+        "maxHealth": "50",
+        "damage": "10",
+        "crit_rate": "0.2",
+        "crit_damage": "2",
+        "DOTTurns": "0",
+        "DOTDam": "0",
+        "heal_amount": "0",
+        "coins":"10",
+        "chances": {
+          "sword": 0.5,
+          "bow":0,
+          "wand":0,
+          "heal":0,
+          "buff":0.5
+        },
+        "SpriteSheet": "Characters/Orc-Grunt.png"
+      },
+      "Orc Mage": {
+        "name": "Orc Mage",
+        "health": "50",
+        "maxHealth": "50",
+        "damage": "20",
+        "crit_rate": "0.2",
+        "crit_damage": "2",
+        "DOTTurns": "5",
+        "DOTDam": "0.3",
+        "heal_amount": "30",
+        "coins":"15",
+        "chances": {
+          "sword": 0,
+          "bow":0,
+          "wand":0.3,
+          "heal":0.3,
+          "buff":0.4
+        },
+        "SpriteSheet": "Characters/Orc-Peon-Red.png"
+      },
+      "Orc Soldier": {
+        "name": "Orc Soldier",
+        "health": "100",
+        "maxHealth": "100",
+        "damage": "20",
+        "crit_rate": "0.2",
+        "crit_damage": "2",
+        "DOTTurns": "0",
+        "DOTDam": "0",
+        "heal_amount": "0",
+        "coins":"20",
+        "chances": {
+          "sword": 0.5,
+          "bow":0,
+          "wand":0,
+          "heal":0.3,
+          "buff":0.2
+        },
+        "SpriteSheet": "Characters/Orc-Soldier-Cyan.png"
+      },
+      "Orc Leader": {
+        "name": "Orc Leader",
+        "health": "150",
+        "maxHealth": "150",
+        "damage": "25",
+        "crit_rate": "0.2",
+        "crit_damage": "3",
+        "DOTTurns": "0",
+        "DOTDam": "0",
+        "heal_amount": "30",
+        "coins":"30",
+        "chances": {
+          "sword": 0.5,
+          "bow":0,
+          "wand":0,
+          "heal":0.1,
+          "buff":0.4
+        },
+        "SpriteSheet": "Characters/Orc-Soldier-Red.png"
+      }
+    }
+  }
+}

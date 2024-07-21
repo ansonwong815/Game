@@ -1,0 +1,7 @@
+Name,Damage,CritRate,CritDam,DOTTurns,DOTDam,Rarity,IconPath
+Iron Sword,15,0.1,1.5,0,0,3,weaponsArt/Iron_Sword.png
+Gambler's Blade,10,0.05,20,0,0,2,weaponsArt/sword7.png
+Shadow Dagger,18,0.3,2.5,1,0.7,2,weaponsArt/sword24.png
+Venom Blade,25,0.12,2.1,3,0.3,1,weaponsArt/sword16.png
+Crystal Rapier,25,0.4,2.4,0,0,1,weaponsArt/sword13.png
+Dragon Slayer,35,0.1,1.5,0,0,1,weaponsArt/sword22.png
