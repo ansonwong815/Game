@@ -86,9 +86,6 @@ class Combat:
         y += random.randint(-20, 20)
         self.damages.append([x, y, s, 252])
 
-    def test(self, *arg):
-        pass
-
     def retreat(self, button):
         if self.turn == self.player:
             self.exit()
@@ -105,7 +102,7 @@ class Combat:
             y = self.game.offY + (w - self.game.offY) // 2 + ((-1) ** (i % 2)) * (
                     (i + 1) // 2) * self.game.cell_size * 2
             self.game.buttons["Combat"].append(
-                Button(x, y, 32, 32, "", self.player_attack, self.test, None, self.enemies[i]))
+                Button(x, y, 32, 32, "", self.player_attack, None, None, self.enemies[i]))
             self.enemies[i].button = self.game.buttons["Combat"][-1]
 
     def exit(self):
@@ -454,7 +451,7 @@ class Game:
 
         for arr in self.buttons.values():
             for button in arr:
-                if button.toggled:
+                if button.toggle and button.toggled:
                     button.toggle(button)
 
     def render_maze(self):

@@ -66,7 +66,6 @@ class MazeNode:
 
 class MazeGen:
     def __init__(self, width, height, start, setting):
-        self.distance = None
         self.visited = None
         self.maze = None
         self.caves = None
@@ -83,7 +82,6 @@ class MazeGen:
         self.caves = []
         self.maze = np.full((self.width, self.height), MazeNode(MazeNodeType.WALL))
         self.visited = np.zeros((self.width, self.height), dtype=bool)
-        self.distance = np.zeros((self.width, self.height), dtype=int)
         self.dfs(self.startX, self.startY, 0)
         self.maze[self.startX][self.startY] = MazeNode(MazeNodeType.START)
         self.assign_cave()
@@ -115,7 +113,6 @@ class MazeGen:
 
     def dfs(self, x, y, dis):
         self.visited[x][y] = True
-        self.distance[x][y] = dis
         self.maze[x][y] = MazeNode(MazeNodeType.NORMAL)
         directions = [(0, 1), (0, -1), (-1, 0), (1, 0)]
         random.shuffle(directions)
@@ -126,9 +123,6 @@ class MazeGen:
                 continue
             count += 1
             self.maze[x + dx][y + dy] = MazeNode(MazeNodeType.NORMAL)
-            self.distance[x + dx][y + dy] = dis + 1
             self.dfs(nx, ny, dis + 2)
         if count == 0:
             self.maze[x][y] = MazeNode(MazeNodeType.DEAD_END)
-            if self.distance[self.end[0]][self.end[1]] < self.distance[x][y]:
-                self.end = x, y

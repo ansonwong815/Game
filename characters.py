@@ -32,7 +32,7 @@ class SpriteLoader:
     def __init__(self, player, sprite_sheet):
         self.player = player
         self.sprite_sheet = Path(__file__).resolve().parent / sprite_sheet
-        self.sprites = self.divide_spritesheet()
+        self.sprites = self.divide_sprite_sheet()
         self.current_sprite = self.sprites[0][0]
         self.current_sprite_arr = [(0, 0)]
         self.sprite_idx = 0
@@ -193,7 +193,7 @@ class SpriteLoader:
     def get_sprite(self):
         return pygame.image.frombytes(self.current_sprite.tobytes(), self.current_sprite.size, "RGBA")
 
-    def divide_spritesheet(self, segment_width=32, segment_height=32):
+    def divide_sprite_sheet(self, segment_width=32, segment_height=32):
         # Open the spritesheet image
         spritesheet = Image.open(self.sprite_sheet)
         spritesheet_width, spritesheet_height = spritesheet.size
