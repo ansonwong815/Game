@@ -32,7 +32,7 @@ class MazeNode:
 
     def __init__(self, type):
         self.type = type
-        self.visible = True
+        self.visible = False
         self.cave_type = None
         self.enemies = []
         self.reward = 0
