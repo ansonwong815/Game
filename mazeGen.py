@@ -11,7 +11,7 @@ class MazeNodeType(enum.Enum):
 
 
 class CaveType(enum.Enum):
-    WUMPUS = 0
+    BOSS = 0
     BAT = 1
     SHOP = 2
     HOLE = 3
@@ -49,8 +49,8 @@ class MazeNode:
         if self.cave_type == CaveType.ORC:
             setting = setting["Orc"]
             self.reward = 20
-        elif self.cave_type == CaveType.WUMPUS:
-            setting = setting["Wumpas"]
+        elif self.cave_type == CaveType.BOSS:
+            setting = setting["Boss"]
             self.reward = 500
         else:
             return

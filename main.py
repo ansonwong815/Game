@@ -52,7 +52,7 @@ class Combat:
         self.turnIdx %= len(self.turnQueue)
         # Check if all enemies have been defeated
         if not self.enemies:
-            if self.cave.cave_type == CaveType.WUMPUS:
+            if self.cave.cave_type == CaveType.BOSS:
                 self.game.game_over("You Have Beaten The Game!")
             self.player.coins += self.cave.reward
             self.cave.reward = 0
@@ -93,7 +93,7 @@ class Combat:
             self.exit()
 
     def setup(self):
-        # Setup the combat screen with buttons for player actions
+        # Set up the combat screen with buttons for player actions
         self.game.buttons["Combat"] = [
             Button(10, self.game.screen.get_height() - 40, 100, 30, "RETREAT", self.retreat, self.game.toggle_board)]
         self.player.canMove = False
@@ -220,7 +220,7 @@ class Game:
         start = (random.randint(0, self.width // 2) * 2, random.randint(0, self.height // 2) * 2)
         # Initialize player
         self.player = Player(*start, setting["player"])
-        # Setup the inventory button for the player's weapon
+        # Set up the inventory button for the player's weapon
         self.buttons["inv"] = [
             Button(0, 0, self.cell_size, self.cell_size, self.weaponLoader.weapons[0].icon, self.equip_weapon,
                    self.display_stats, self.weaponLoader.weapons[0].background_colour,
@@ -344,8 +344,8 @@ class Game:
         # Retrieve the current node the player is on
         node = self.maze[self.player.x][self.player.y]
         # Check the type of the cave and execute corresponding actions
-        if node.cave_type == CaveType.WUMPUS:
-            # If the cave is of type WUMPUS, initiate combat with the enemies in the cave
+        if node.cave_type == CaveType.BOSS:
+            # If the cave is of type BOSS, initiate combat with the enemies in the cave
             self.combat = Combat(self.player, node.enemies, self, node)
         if node.cave_type == CaveType.BAT:
             # If the cave is of type BAT, teleport the player to a random location
@@ -460,25 +460,25 @@ class Game:
 
     def get_info(self):
         # Get the distance to the nearest enemies
-        dist_to_wumpas = float('inf')
+        dist_to_boss = float('inf')
         dist_to_orc = float('inf')
         dist_to_bat = float('inf')
         for x, y in self.gen.caves:
             # Calculate the minimum Euclidean distance to enemies
             if self.maze[x][y].cave_type == CaveType.ORC:
                 dist_to_orc = min(dist_to_orc, math.hypot(x - self.player.x, y - self.player.y))
-            if self.maze[x][y].cave_type == CaveType.WUMPUS:
-                dist_to_wumpas = min(dist_to_wumpas, math.hypot(x - self.player.x, y - self.player.y))
+            if self.maze[x][y].cave_type == CaveType.BOSS:
+                dist_to_boss = min(dist_to_boss, math.hypot(x - self.player.x, y - self.player.y))
             if self.maze[x][y].cave_type == CaveType.BAT:
                 dist_to_bat = min(dist_to_bat, math.hypot(x - self.player.x, y - self.player.y))
         # Round up the distances to a multiple of 5
         dist_to_bat = ((dist_to_bat - 1) // 5 + 1) * 5
-        dist_to_wumpas = ((dist_to_wumpas - 1) // 5 + 1) * 5
+        dist_to_boss = ((dist_to_boss - 1) // 5 + 1) * 5
         dist_to_orc = ((dist_to_orc - 1) // 5 + 1) * 5
         # Return the distances to the enemies as a string
         return ("" if math.isnan(dist_to_orc) else f"Orc ~{int(dist_to_orc)}m. ") + (
             "" if math.isnan(dist_to_bat) else f"Bat ~{int(dist_to_bat)}m. ") + (
-            "" if math.isnan(dist_to_wumpas) else f"Boss ~{int(dist_to_wumpas)}m.")
+            "" if math.isnan(dist_to_boss) else f"Boss ~{int(dist_to_boss)}m.")
 
     def manage_input(self):
         # Process all events from the event queue

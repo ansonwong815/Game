@@ -314,7 +314,7 @@ class Player:
         self.damage = 1
         self.goto = (None, None)
         self.closest_bat = None
-        self.closest_wumpus = None
+        self.closest_boss = None
         self.closest_mouse = None
         self.sprite = SpriteLoader(self, "Characters/Warrior-Red.png")
         self.healthIcon = pygame.image.load(Path(__file__).resolve().with_name("heart.png")).convert_alpha()

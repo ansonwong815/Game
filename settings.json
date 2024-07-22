@@ -7,7 +7,7 @@
     },
     "caves": {
       "min": 8,
-      "WUMPUS": 1,
+      "BOSS": 1,
       "BAT": 1,
       "SHOP": 2,
       "HOLE": 0,
@@ -22,7 +22,7 @@
         "Orc Villager": [0,2],
         "Orc Grunt": [1,2]
       },
-      "Wumpas": {
+      "Boss": {
         "Reward": 50,
         "Orc Leader": [0,1],
         "Orc Soldier": [1,2],
@@ -142,7 +142,7 @@
     },
     "caves": {
       "min": 12,
-      "WUMPUS": 1,
+      "BOSS": 1,
       "BAT": 2,
       "SHOP": 2,
       "HOLE": 0,
@@ -157,7 +157,7 @@
         "Orc Grunt": [1,2],
         "Orc Villager": [0,2]
       },
-      "Wumpas": {
+      "Boss": {
         "Reward": 50,
         "Orc Leader": [1,1],
         "Orc Soldier": [1,2],
@@ -277,7 +277,7 @@
     },
     "caves": {
       "min": 15,
-      "WUMPUS": 1,
+      "BOSS": 1,
       "BAT": 3,
       "SHOP": 2,
       "HOLE": 0.5,
@@ -292,7 +292,7 @@
         "Orc Grunt": [1,2],
         "Orc Villager": [0,2]
       },
-      "Wumpas": {
+      "Boss": {
         "Reward": 50,
         "Orc Leader": [1,1],
         "Orc Soldier": [2,2],
