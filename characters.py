@@ -4,28 +4,15 @@ from utils import *
 
 class EnemyLoader:
     def __init__(self, setting):
-        for i in setting.keys():
-            setting[i]["chances"] = list(setting[i]["chances"].values())
-        self.orc_villager = list(setting["Orc Villager"].values())
-        self.orc_grunt = list(setting["Orc Grunt"].values())
-        self.orc_mage = list(setting["Orc Mage"].values())
-        self.orc_soldier = list(setting["Orc Soldier"].values())
-        self.orc_leader = list(setting["Orc Leader"].values())
+        # Load the enemy settings from the provided settings
+        self.setting = {}
+        for k, v in setting.items():
+            v["chances"] = list(v["chances"].values())
+            self.setting[k] = v
 
-    def get_orc_villager(self):
-        return Enemy(*self.orc_villager)
-
-    def get_orc_grunt(self):
-        return Enemy(*self.orc_grunt)
-
-    def get_orc_mage(self):
-        return Enemy(*self.orc_mage)
-
-    def get_orc_soldier(self):
-        return Enemy(*self.orc_soldier)
-
-    def get_orc_leader(self):
-        return Enemy(*self.orc_leader)
+    def get_enemy(self, type):
+        # return a new instance of enemy
+        return Enemy(*self.setting[type].values())
 
 
 class SpriteLoader:
@@ -44,6 +31,7 @@ class SpriteLoader:
         self.params = None
 
     def walk(self, direction):
+        # Change the array of indexes to walk and based on the direction
         self.loop = True
         if self.last_operation != (self.walk, direction):
             self.sprite_idx = 0
@@ -170,12 +158,15 @@ class SpriteLoader:
         self.last_operation = (self.dead, direction)
 
     def next(self):
+        # Update the current sprite index based on the cooldown
         if self.frames_till_next == 0:
             self.frames_till_next = self.next_sprite_cooldown
             self.sprite_idx += 1
             if self.loop:
+                # Loop the animation if the loop flag is set
                 self.sprite_idx %= len(self.current_sprite_arr)
             elif self.sprite_idx >= len(self.current_sprite_arr):
+                # Stop the animation if the loop flag is not set and run function if provided
                 self.idle(self.player.facing)
                 if self.animationEnd:
                     if self.params:
@@ -187,24 +178,23 @@ class SpriteLoader:
         self.update()
 
     def update(self):
+        # Update the current sprite based on the current sprite index
         y, x = self.current_sprite_arr[self.sprite_idx]
         self.current_sprite = self.sprites[y][x]
 
     def get_sprite(self):
+        # Convert the current sprite to a pygame image
         return pygame.image.frombytes(self.current_sprite.tobytes(), self.current_sprite.size, "RGBA")
 
     def divide_sprite_sheet(self, segment_width=32, segment_height=32):
         # Open the spritesheet image
         spritesheet = Image.open(self.sprite_sheet)
         spritesheet_width, spritesheet_height = spritesheet.size
-
         # Calculate the number of segments horizontally and vertically
         num_segments_x = spritesheet_width // segment_width
         num_segments_y = spritesheet_height // segment_height
-
         # Create a 2D list to store the segments
         segments = []
-
         # Loop over the sprite sheet and extract each segment
         for y in range(num_segments_y):
             row = []
@@ -216,7 +206,6 @@ class SpriteLoader:
                 segment = spritesheet.crop((left, upper, right, lower))
                 row.append(segment)
             segments.append(row)
-
         return segments
 
 
@@ -237,41 +226,36 @@ class Enemy:
         self.SpriteSheet = SpriteLoader(self, SpriteSheet)
         self.SpriteSheet.idle(Direction.LEFT)
         self.w, self.h = size
-        self.HealthBar = None
         self.affected_dot = []
         self.chances = chances
         self.button = None
+        self.HealthBar = None
         self.update_health_bar()
 
     def update_health_bar(self):
+        # Create a health bar based on the current health
         self.HealthBar = pygame.Surface((self.w, 4))
         health_rect = pygame.Rect(0, 0, int(self.health * self.w / self.maxHealth), 4)
         pygame.draw.rect(self.HealthBar, (255, 0, 0), health_rect)
 
     def combat_turn(self, player, combat):
+        # Update the turn index
         combat.turnIdx += 1
         combat.turnIdx %= len(combat.turnQueue)
         combat.turn = combat.turnQueue[combat.turnIdx]
-        for i in self.affected_dot:
-            if not i[1]:
-                self.affected_dot.remove(i)
+        # Apply the damage over time effects
+        self.affected_dot = [i for i in self.affected_dot if i[1]]
         for i in self.affected_dot:
             self.health -= i[0]
             combat.add_damage_display(*self.button.rect.center, i[0], True)
             i[1] -= 1
             self.update_health_bar()
         if self.health >= 0:
+            # Randomly choose an action based on the chances
             _ = random.random()
-            if _ < self.chances[0]:
-                self.sword(player, combat)
-            elif _ < self.chances[0] + self.chances[1]:
-                self.bow(player, combat)
-            elif _ < self.chances[0] + self.chances[1] + self.chances[2]:
-                self.wand(player, combat)
-            elif _ < self.chances[0] + self.chances[1] + self.chances[2] + self.chances[3]:
-                self.heal(combat)
-            else:
-                self.buff(combat)
+            action = next((action for action, chance in zip(['sword', 'bow', 'wand', 'heal', 'buff'], self.chances) if
+                           _ < chance), 'buff')
+            getattr(self, action)(player, combat)
         else:
             combat.next()
 
@@ -287,19 +271,20 @@ class Enemy:
         self.SpriteSheet.wand(combat.next)
         self.damage_player(player, combat)
 
-    def heal(self, combat):
+    def heal(self, _, combat):
         target = random.choice(combat.enemies)
         target.health += self.heal_amount
         target.health = max(target.health, target.maxHealth)
         self.SpriteSheet.wand(combat.next)
 
-    def buff(self, combat):
+    def buff(self, _, combat):
         target = random.choice(combat.enemies)
         target.damage *= 1.2
         combat.game.alert.add_text(f"{self.name} buffed {target.name}", 1)
         self.SpriteSheet.wand(combat.next)
 
     def damage_player(self, player, combat):
+        # Deal damage to the player based on the crit rate
         if random.random() < self.critRate:
             player.health -= self.damage * self.critDamage
             combat.add_damage_display(combat.game.offX * combat.game.cell_size + 100,
@@ -312,11 +297,13 @@ class Enemy:
                                       combat.game.offY * combat.game.cell_size - 16 + (
                                               combat.game.screen.get_height() - combat.game.offY * combat.game.cell_size) // 2,
                                       self.damage, False)
+        # Apply the damage over time effect
         player.affected_dot.append([self.damage * self.DOTDam, self.DOTTurns])
 
 
 class Player:
     def __init__(self, x, y, setting):
+        # Initialize the player with the provided settings
         self.x = x
         self.y = y
         self.facing = Direction.DOWN

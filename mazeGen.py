@@ -38,12 +38,14 @@ class MazeNode:
         self.reward = 0
 
     def colour(self):
+        # Returns the colour of the node based on its type
         if self.visible:
             return self.colours[self.type.value]
         else:
             return self.colours[0]
 
     def setup_cave(self, enemyLoader, setting):
+        # Configures the node with enemies and rewards based on the cave type and provided settings
         if self.cave_type == CaveType.ORC:
             setting = setting["Orc"]
             self.reward = 20
@@ -52,16 +54,17 @@ class MazeNode:
             self.reward = 500
         else:
             return
+        # Generate enemies with new enemy objects
         for i in range(random.randint(*setting["Orc Leader"])):
-            self.enemies.append(enemyLoader.get_orc_leader())
+            self.enemies.append(enemyLoader.get_enemy("Orc Leader"))
         for i in range(random.randint(*setting["Orc Soldier"])):
-            self.enemies.append(enemyLoader.get_orc_soldier())
+            self.enemies.append(enemyLoader.get_enemy("Orc Soldier"))
         for i in range(random.randint(*setting["Orc Mage"])):
-            self.enemies.append(enemyLoader.get_orc_mage())
+            self.enemies.append(enemyLoader.get_enemy("Orc Mage"))
         for i in range(random.randint(*setting["Orc Grunt"])):
-            self.enemies.append(enemyLoader.get_orc_grunt())
+            self.enemies.append(enemyLoader.get_enemy("Orc Grunt"))
         for i in range(random.randint(*setting["Orc Villager"])):
-            self.enemies.append(enemyLoader.get_orc_villager())
+            self.enemies.append(enemyLoader.get_enemy("Orc Villager"))
 
 
 class MazeGen:
@@ -79,25 +82,32 @@ class MazeGen:
         self.generate_maze()
 
     def generate_maze(self):
-        self.caves = []
+        # The maze initially would be a grid of walls with the start node being the only normal node
         self.maze = np.full((self.width, self.height), MazeNode(MazeNodeType.WALL))
         self.visited = np.zeros((self.width, self.height), dtype=bool)
+        # dfs function will turn the walls into normal nodes to generate the maze
         self.dfs(self.startX, self.startY, 0)
         self.maze[self.startX][self.startY] = MazeNode(MazeNodeType.START)
         self.assign_cave()
 
     def assign_cave(self):
+        self.caves = []
+        # Assigns caves to dead ends based on the settings
         nums = list(self.setting["caves"].values())[1::]
         for i in range(len(nums)):
+            # If number is a float, randomly round up or down based on the decimal value
             nums[i] = ((nums[i] - int(nums[i])) > random.random()) + int(nums[i])
         for i in range(self.width):
             for j in range(self.height):
+                # If the node is a dead end, assign a cave to it
                 if self.maze[i][j].type == MazeNodeType.DEAD_END:
                     self.maze[i][j].cave_type = CaveType.REWARD
                     self.caves.append((i, j))
+        # If there are not enough caves, regenerate the maze
         if len(self.caves) < self.setting["caves"]["min"]:
             self.generate_maze()
             return
+        # Shuffle the caves and assign them to the nodes
         random.shuffle(self.caves)
         idx = 0
         for i in range(len(nums)):
@@ -105,6 +115,7 @@ class MazeGen:
                 idx += 1
                 x, y = self.caves[idx]
                 self.maze[x][y].cave_type = CaveType(i)
+        # Setup the caves
         for x, y in self.caves:
             self.maze[x][y].setup_cave(self.enemyLoader, self.setting["caves setup"])
 
@@ -112,6 +123,7 @@ class MazeGen:
         return self.maze
 
     def dfs(self, x, y, dis):
+        # Randomised depth first search algorithm to generate a maze
         self.visited[x][y] = True
         self.maze[x][y] = MazeNode(MazeNodeType.NORMAL)
         directions = [(0, 1), (0, -1), (-1, 0), (1, 0)]
@@ -123,6 +135,7 @@ class MazeGen:
                 continue
             count += 1
             self.maze[x + dx][y + dy] = MazeNode(MazeNodeType.NORMAL)
+            # Recursively call the function with the new coordinates
             self.dfs(nx, ny, dis + 2)
         if count == 0:
             self.maze[x][y] = MazeNode(MazeNodeType.DEAD_END)
