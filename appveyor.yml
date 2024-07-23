@@ -9,8 +9,7 @@ configuration: Release
 
 build_script:
   - cmd: >
-      pip install -r requirements.txt
-      pip install pyinstaller
+      pip install numpy pygame pillow utils pyinstaller
       pyinstaller main.spec
 
 artifacts:
