@@ -2,25 +2,19 @@ version: 1.0.{build}
 
 image: Visual Studio 2019
 
-platform:
-  - x64
-
 configuration: Release
 
 environment:
-  matrix:
-    - PYTHON: "C:\\Python39" # Specify a compatible Python version (3.9 in this case)
+  PYTHON: "C:\\Python39"
 
 install:
-  - "%PYTHON%\\python.exe -m pip install --upgrade pip"
-  - "%PYTHON%\\python.exe -m pip install pyinstaller"
-  - "%PYTHON%\\python.exe -m pip install numpy pygame pillow utils"
-  - set PATH=%PYTHON%\\Scripts;%PATH%
+  - set PATH=%PYTHON%;%PYTHON%\Scripts;%PATH%
+  - pip install -r requirements.txt
+  - pip install pyinstaller
 
 build_script:
-  - cmd: >
-      %PYTHON%\\python.exe -m pyinstaller main.spec
+  - pyinstaller main.spec
 
 artifacts:
-  - path: dist\game.exe
-    name: game-exe
+  - path: dist\*
+    name: Executables
