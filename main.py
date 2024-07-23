@@ -94,6 +94,7 @@ class Combat:
 
     def setup(self):
         # Set up the combat screen with buttons for player actions
+        self.game.alert.add_text("Press enemy to attack!", 10)
         self.game.buttons["Combat"] = [
             Button(10, self.game.screen.get_height() - 40, 100, 30, "RETREAT", self.retreat, self.game.toggle_board)]
         self.player.canMove = False

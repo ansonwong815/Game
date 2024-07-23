@@ -165,6 +165,7 @@ class Alert:
         # Blit the text surface to the game screen, positioned at the top right
         self.game.screen.blit(self.text_surface, (self.game.screen.get_width() - self.text_surface.get_width(), 0))
 
+
 class Direction(enum.Enum):
     UP = [0, -1]
     DOWN = [0, 1]
