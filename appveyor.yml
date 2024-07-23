@@ -7,10 +7,18 @@ platform:
 
 configuration: Release
 
+environment:
+  matrix:
+    - PYTHON: "C:\\Python39" # Specify a compatible Python version (3.9 in this case)
+
+install:
+  - "%PYTHON%\\python.exe -m pip install --upgrade pip"
+  - "%PYTHON%\\python.exe -m pip install pyinstaller"
+  - "%PYTHON%\\python.exe -m pip install numpy pygame pillow utils pyinstaller"
+
 build_script:
   - cmd: >
-      pip install numpy pygame pillow utils pyinstaller
-      pyinstaller main.spec
+      %PYTHON%\\python.exe -m pyinstaller main.spec
 
 artifacts:
   - path: dist\game.exe
