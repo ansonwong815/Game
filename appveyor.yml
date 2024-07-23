@@ -14,7 +14,8 @@ environment:
 install:
   - "%PYTHON%\\python.exe -m pip install --upgrade pip"
   - "%PYTHON%\\python.exe -m pip install pyinstaller"
-  - "%PYTHON%\\python.exe -m pip install numpy pygame pillow utils pyinstaller"
+  - "%PYTHON%\\python.exe -m pip install numpy pygame pillow utils"
+  - set PATH=%PYTHON%\\Scripts;%PATH%
 
 build_script:
   - cmd: >
