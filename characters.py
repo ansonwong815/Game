@@ -316,7 +316,7 @@ class Enemy:
         # Returns the stats of the enemy
         res = [(f"{self.name}", 20),
                (f"Health: {round(self.health,2)}", 10),
-               (f"Dam: {self.damage}", 10), ]
+               (f"Dam: {round(self.damage,2)}", 10), ]
         if self.critRate != 0:
             res.append((f"CritRate: {round(self.critRate * 100, 2)}%", 10))
             res.append((f"CritDam: {round(self.critDamage * 100, 2)}%", 10))
