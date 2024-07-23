@@ -94,7 +94,7 @@ class Combat:
 
     def setup(self):
         # Set up the combat screen with buttons for player actions
-        self.game.alert.add_text("Press enemy to attack!", 10)
+        self.game.alert.add_text("Press enemy to attack!", 5)
         self.game.buttons["Combat"] = [
             Button(10, self.game.screen.get_height() - 40, 100, 30, "RETREAT", self.retreat, self.game.toggle_board)]
         self.player.canMove = False
@@ -108,7 +108,7 @@ class Combat:
             y = self.game.offY + (w - self.game.offY) // 2 + ((-1) ** (i % 2)) * (
                     (i + 1) // 2) * self.game.cell_size * 2
             self.game.buttons["Combat"].append(
-                Button(x, y, 32, 32, "", self.player_attack, None, None, self.enemies[i]))
+                Button(x, y, 32, 32, "", self.player_attack, self.enemies[i].display_stats, None, self.enemies[i]))
             self.enemies[i].button = self.game.buttons["Combat"][-1]
 
     def exit(self):
@@ -233,7 +233,7 @@ class Game:
         self.player.damage = self.player.weapon.damage
         self.update_inv()
         # Generate a new maze based on the game settings
-        self.gen = MazeGen(self.width, self.height, start, setting)
+        self.gen = MazeGen(self.width, self.height, start, setting, self)
         self.maze = self.gen.getMaze()
         # Initialize an alert system for in-game notifications
         self.alert = Alert(self)
@@ -258,7 +258,7 @@ class Game:
     def heal(self, _):
         # heal player and deduct coins
         if self.player.coins < 10:
-            self.alert.add_text("Insufficient Coins", 3)
+            self.alert.add_text("Insufficient Coins", 1)
             return
         self.player.coins -= 10
         self.player.health = min(self.player.health + self.player.maxHealth * 0.3, self.player.maxHealth)
@@ -310,7 +310,7 @@ class Game:
     def add_random_weapon(self):
         # checks if inventory is full
         if len(self.buttons["inv"]) >= 20:
-            self.alert.add_text("Inventory Full", 3)
+            self.alert.add_text("Inventory Full", 1)
             return
         # adds a random weapon to the inventory
         weapon = copy.copy(self.weaponLoader.get_random())
@@ -327,7 +327,7 @@ class Game:
     def buy_random_weapon(self, _):
         # buy random weapon and deduct coins
         if self.player.coins < 15:
-            self.alert.add_text("Insufficient Coins", 3)
+            self.alert.add_text("Insufficient Coins", 1)
             return
         self.player.coins -= 15
         self.add_random_weapon()
@@ -335,7 +335,7 @@ class Game:
     def health_buff(self, _):
         # buy health buff and deduct coins
         if self.player.coins < 10:
-            self.alert.add_text("Insufficient Coins", 3)
+            self.alert.add_text("Insufficient Coins", 1)
             return
         self.player.coins -= 10
         self.player.maxHealth += 50
@@ -350,7 +350,7 @@ class Game:
             self.combat = Combat(self.player, node.enemies, self, node)
         if node.cave_type == CaveType.BAT:
             # If the cave is of type BAT, teleport the player to a random location
-            self.alert.add_text("A bat sent you to a random location", 3)
+            self.alert.add_text("A bat sent you to a random location", 1)
             self.player.x, self.player.y = self.gen.caves[random.randint(0, len(self.gen.caves) - 1)]
             self.move_player(Direction.NONE)
         if node.cave_type == CaveType.SHOP:
@@ -374,7 +374,7 @@ class Game:
             self.combat = Combat(self.player, node.enemies, self, node)
         if node.cave_type == CaveType.REWARD:
             # If the cave is of type REWARD, grant the player a reward and reset the cave type
-            self.alert.add_text("You Received a Reward", 3)
+            self.alert.add_text("You Received a Reward", 1)
             self.add_random_weapon()
             self.player.maxHealth += 50
             self.player.health += 50

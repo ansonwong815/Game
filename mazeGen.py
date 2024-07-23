@@ -68,7 +68,7 @@ class MazeNode:
 
 
 class MazeGen:
-    def __init__(self, width, height, start, setting):
+    def __init__(self, width, height, start, setting,game):
         self.visited = None
         self.maze = None
         self.caves = None
@@ -78,7 +78,7 @@ class MazeGen:
         self.width = width
         self.start = start
         self.end = start
-        self.enemyLoader = EnemyLoader(setting["enemies"])
+        self.enemyLoader = EnemyLoader(setting["enemies"],game)
         self.generate_maze()
 
     def generate_maze(self):

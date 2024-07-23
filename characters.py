@@ -3,7 +3,8 @@ from utils import *
 
 
 class EnemyLoader:
-    def __init__(self, setting):
+    def __init__(self, setting, game):
+        self.game = game
         # Load the enemy settings from the provided settings
         self.setting = {}
         for k, v in setting.items():
@@ -12,7 +13,7 @@ class EnemyLoader:
 
     def get_enemy(self, type):
         # return a new instance of enemy
-        return Enemy(*self.setting[type].values())
+        return Enemy(*self.setting[type].values(), self.game)
 
 
 class SpriteLoader:
@@ -211,7 +212,7 @@ class SpriteLoader:
 
 class Enemy:
     def __init__(self, name, health, maxHealth, damage, crit_rate, crit_damage, DOTTurns, DOTDam, heal_amount, coins,
-                 chances, SpriteSheet, size=(32, 32)):
+                 chances, SpriteSheet, game, size=(32, 32)):
         self.name = name
         self.health = float(health)
         self.maxHealth = float(maxHealth)
@@ -222,14 +223,18 @@ class Enemy:
         self.DOTDam = float(DOTDam)
         self.heal_amount = float(heal_amount)
         self.coins = int(coins)
+        self.game = game
         self.facing = Direction.LEFT
         self.SpriteSheet = SpriteLoader(self, SpriteSheet)
         self.SpriteSheet.idle(Direction.LEFT)
+        self.game = game
         self.w, self.h = size
         self.affected_dot = []
         self.chances = chances
         self.button = None
         self.HealthBar = None
+        self.stats_surface = None
+        self.update_stats()
         self.update_health_bar()
 
     def update_health_bar(self):
@@ -280,6 +285,7 @@ class Enemy:
     def buff(self, _, combat):
         target = random.choice(combat.enemies)
         target.damage *= 1.2
+        target.update_stats()
         combat.game.alert.add_text(f"{self.name} buffed {target.name}", 1)
         self.SpriteSheet.wand(combat.next)
 
@@ -299,6 +305,50 @@ class Enemy:
                                       self.damage, False)
         # Apply the damage over time effect
         player.affected_dot.append([self.damage * self.DOTDam, self.DOTTurns])
+
+    def display_stats(self, button):
+        # display weapon stats when mouse hovers over weapon
+        surface = button.info.stats_surface
+        x, y = pygame.mouse.get_pos()
+        self.game.screen.blit(surface, (min(self.game.screen.get_width() - surface.get_width(), x + 10), y))
+
+    def info(self):
+        # Returns the stats of the enemy
+        res = [(f"{self.name}", 15),
+               (f"Dam: {self.damage}", 10), ]
+        if self.critRate != 0:
+            res.append((f"CritRate: {round(self.critRate * 100, 2)}%", 10))
+            res.append((f"CritDam: {round(self.critDamage * 100, 2)}%", 10))
+        if self.DOTTurns != 0:
+            res.append((f"DOTTurns: {round(self.DOTTurns, 2)}", 10))
+            res.append((f"DOTDam: {round(self.DOTDam * 100, 2)}%", 10))
+        return res
+
+    def update_stats(self):
+        # Create a surface with the stats of the enemy which can be rendered
+        text_color = (255, 255, 255)  # White
+        background_color = (0, 0, 255)  # Blue
+        total_height = 0
+        width = 0
+        # Calculate the size of the surface such that it can fit all the strings
+        for string, font_size in self.info():
+            font = pygame.font.SysFont("Arial", font_size)
+            total_height += font.get_linesize()
+            width = max(width, font.size(string)[0])
+        surface = pygame.Surface((width, total_height))
+        rect = pygame.Rect(0, 0, width, total_height)
+        text_x = rect.centerx - width / 2
+        text_y = rect.centery - total_height / 2
+        pygame.draw.rect(surface, background_color, rect, 0)
+        y_offset = text_y
+        # Render the strings on the surface
+        for string, font_size in self.info():
+            font = pygame.font.SysFont("Arial", font_size)
+            text_surface = font.render(string, True, text_color)
+            text_rect = text_surface.get_rect(x=text_x, y=y_offset)
+            surface.blit(text_surface, text_rect)
+            y_offset += font.get_linesize()
+        self.stats_surface = surface
 
 
 class Player:
