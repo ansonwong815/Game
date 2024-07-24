@@ -238,6 +238,7 @@ class Enemy:
         self.update_health_bar()
 
     def update_health_bar(self):
+        self.update_stats()
         # Create a health bar based on the current health
         self.HealthBar = pygame.Surface((self.w, 4))
         health_rect = pygame.Rect(0, 0, int(self.health * self.w / self.maxHealth), 4)

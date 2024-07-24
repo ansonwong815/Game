@@ -172,6 +172,7 @@ class Combat:
         button.info.affected_dot.append([self.player.damage * self.player.weapon.DOTDam, self.player.weapon.DOTTurns])
         # Update the enemy's health bar to reflect the new health status
         button.info.update_health_bar()
+        # Apply splash damage to nearby enemies if the weapon has any
         button_idx = self.enemies.index(button.info)
         spashDam = damage_dealt * self.player.weapon.splashDam
         for i in range(len(self.enemies)):
