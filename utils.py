@@ -19,27 +19,32 @@ class WeaponLoader:
                 for row in reader:
                     self.weapons.append(Weapon(*row, getattr(WeaponType, weapon_type.upper())))
 
-    def get_random(self):
+    def get_random(self, rarities):
         # Get a random weapon based on the rarity
         # Imagine each weapon as a segment with width rarity as length on a line.
         # Random number is picked between 1 and total rarity of weapons will point to a weapon which would be returned
-        total_rarity = sum(weapon.rarity for weapon in self.weapons)
+        total_rarity = sum(weapon.rarity for weapon in self.weapons if weapon.rarity in rarities)
         pick = random.randint(1, total_rarity)
         current = 0
         for weapon in self.weapons:
+            if weapon.rarity not in rarities:
+                continue
             current += weapon.rarity
             if current >= pick:
                 return weapon
 
 
 class Weapon:
-    def __init__(self, name, damage, crit_rate, crit_damage, DOTTurns, DOTDam, rarity, iconPath, weaponType):
+    def __init__(self, name, damage, crit_rate, crit_damage, DOTTurns, DOTDam, splashRange, splashDam, rarity, iconPath,
+                 weaponType):
         self.name = name
         self.damage = float(damage)
         self.critRate = float(crit_rate)
         self.critDamage = float(crit_damage)
         self.DOTTurns = int(DOTTurns)
         self.DOTDam = float(DOTDam)
+        self.splashRange = int(splashRange)
+        self.splashDam = float(splashDam)
         self.rarity = int(rarity)
         self.weaponType = weaponType
         self.iconPath = Path(__file__).resolve().parent / iconPath
@@ -49,7 +54,7 @@ class Weapon:
 
     def roll(self):
         # Randomly change the stats of the weapon
-        for attr in ['damage', 'critRate', 'critDamage', 'DOTDam']:
+        for attr in ['damage', 'critRate', 'critDamage', 'DOTDam', 'splashDam']:
             setattr(self, attr, round(getattr(self, attr) * random.uniform(0.75, 1.25), 2))
         self.stats_surface = self.update_stats()
 
@@ -63,6 +68,9 @@ class Weapon:
         if self.DOTTurns != 0:
             res.append((f"DOTTurns: {round(self.DOTTurns, 2)}", 10))
             res.append((f"DOTDam: {round(self.DOTDam * 100, 2)}%", 10))
+        if self.splashRange != 0:
+            res.append((f"SplashRange: {self.splashRange}", 10))
+            res.append((f"SplashDam: {round(self.splashDam * 100, 2)}%", 10))
         return res
 
     def update_stats(self):

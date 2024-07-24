@@ -1,6 +1,6 @@
-Name,Damage,CritRate,CritDam,DOTTurns,DOTDam,Rarity,IconPath
-Mystic Wand,10,0.15,2.2,0,0,3,weaponsArt/staff13.png
-Phantom Staff,13,0.18,2.3,0,0,3,weaponsArt/staff3.png
-Arcane Orb,15,0,0,4,0.3,2,weaponsArt/orb6.png
-Elemental Staff,20,0.2,2.4,5,0.2,1,weaponsArt/staff2.png
-Celestial Rod,30,0.16,2.5,0,0,1,weaponsArt/wand2.png
+Name,Damage,CritRate,CritDam,DOTTurns,DOTDam,SplashRange,SplashDam,Rarity,IconPath
+Mystic Wand,10,0.15,2.2,0,0,1,1,3,weaponsArt/staff13.png
+Phantom Staff,13,0.18,2.3,0,0,0,0,3,weaponsArt/staff3.png
+Arcane Orb,15,0,0,4,0.3,1,0.3,2,weaponsArt/orb6.png
+Elemental Staff,20,0.2,2.4,3,0.2,2,0.4,1,weaponsArt/staff2.png
+Celestial Rod,30,0.16,2.5,0,0,1,0.3,1,weaponsArt/wand2.png

@@ -110,7 +110,7 @@ class Combat:
             self.game.buttons["Combat"].append(
                 Button(x, y, 32, 32, "", self.player_attack, self.enemies[i].display_stats, None, self.enemies[i]))
             self.enemies[i].button = self.game.buttons["Combat"][-1]
-
+        self.enemies.sort(key=lambda x: x.button.y)
     def exit(self):
         # Exit combat and return to the maze
         self.player.affected_dot = []
@@ -172,6 +172,16 @@ class Combat:
         button.info.affected_dot.append([self.player.damage * self.player.weapon.DOTDam, self.player.weapon.DOTTurns])
         # Update the enemy's health bar to reflect the new health status
         button.info.update_health_bar()
+        button_idx = self.enemies.index(button.info)
+        spashDam = damage_dealt * self.player.weapon.splashDam
+        for i in range(len(self.enemies)):
+            if self.enemies[i] == button.info:
+                continue
+            if abs(i - button_idx) <= self.player.weapon.splashRange:
+                self.enemies[i].health -= spashDam
+                self.enemies[i].update_health_bar()
+                self.add_damage_display(*button.rect.center, spashDam, False)
+                self.enemies[i].button.info.affected_dot.append([spashDam*self.player.weapon.DOTDam, self.player.weapon.DOTTurns])
         # Trigger the player's attack animation based on the weapon type
         if self.player.weapon.weaponType == WeaponType.SWORDS:
             self.player.sprite.sword(self.next)
@@ -307,13 +317,13 @@ class Game:
             _y = y + (c // 10) * (self.cell_size + 3)
             self.buttons["inv"][c].move(_x, _y)
 
-    def add_random_weapon(self):
+    def add_random_weapon(self, rarities):
         # checks if inventory is full
         if len(self.buttons["inv"]) >= 20:
             self.alert.add_text("Inventory Full", 1)
             return
         # adds a random weapon to the inventory
-        weapon = copy.copy(self.weaponLoader.get_random())
+        weapon = copy.copy(self.weaponLoader.get_random(rarities))
         weapon.roll()
         self.buttons["inv"].append(
             Button(0, 0, self.cell_size, self.cell_size, weapon.icon, self.equip_weapon,
@@ -330,7 +340,7 @@ class Game:
             self.alert.add_text("Insufficient Coins", 1)
             return
         self.player.coins -= 15
-        self.add_random_weapon()
+        self.add_random_weapon([1, 2])
 
     def health_buff(self, _):
         # buy health buff and deduct coins
@@ -375,7 +385,7 @@ class Game:
         if node.cave_type == CaveType.REWARD:
             # If the cave is of type REWARD, grant the player a reward and reset the cave type
             self.alert.add_text("You Received a Reward", 1)
-            self.add_random_weapon()
+            self.add_random_weapon([2, 3])
             self.player.maxHealth += 50
             self.player.health += 50
             node.cave_type = CaveType.BLANK
